@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_cron_delete_old_logs" model="ir.cron">
+        <field name="name">Eliminar logs de dispositivo antiguos</field>
+        <field name="model_id" ref="model_res_device_log" />
+        <field name="state">code</field>
+        <field name="code">model._delete_old_logs()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field
+            name="nextcall"
+            eval="(DateTime.now() + relativedelta(hours=3)).replace(hour=2, minute=0, second=0)"
+        />
+    </record>
+
+    <record id="ir_cron_delete_all_sessions_user" model="ir.cron">
+        <field name="name">Cerrar todas las sesiones del Usuario</field>
+        <field name="model_id" ref="model_res_device" />
+        <field name="state">code</field>
+        <field name="code">
+            for device in env['res.device'].search([('user_id', '!=', False)]):
+                device.delete_all_user_sessions()
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field
+            name="nextcall"
+            eval="(DateTime.now() + relativedelta(hours=3)).replace(hour=2, minute=0, second=0)"
+        />
+    </record>
+
+</odoo>

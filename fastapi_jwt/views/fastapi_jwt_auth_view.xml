@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="auth_jwt_validator_form_view">
+        <field name="name">auth.jwt.validator.form</field>
+        <field name="model">auth.jwt.validator</field>
+        <field name="inherit_id" ref="auth_jwt.view_auth_jwt_validator_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='secret_key']" position="after">
+                <field
+                    name="token_duration"
+                    invisible="signature_type != 'secret'"
+                    required="signature_type == 'secret'"
+                />
+                <field
+                    name="refresh_duration"
+                    invisible="signature_type != 'refresh'"
+                    required="signature_type == 'refresh'"
+                />
+                <field
+                    name="secret_key"
+                    string="Key"
+                    invisible="signature_type != 'refresh'"
+                    required="signature_type == 'refresh'"
+                />
+                <field
+                    name="secret_algorithm"
+                    string="Algorithm"
+                    invisible="signature_type != 'refresh'"
+                    required="signature_type == 'refresh'"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

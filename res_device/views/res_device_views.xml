@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <record model="ir.ui.view" id="res_device_view_form">
+            <field name="name">res.device.form</field>
+            <field name="model">res.device</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="user_id" />
+                            <field name="display_name" string="Name" />
+                            <field name="ip_address" string="Last IP Address" />
+                        </group>
+                        <group>
+                            <field name="first_activity" />
+                            <field name="last_activity" />
+                        </group>
+                        <group>
+                            <field name="linked_ip_addresses" />
+                        </group>
+                    </group>
+                    <div class="oe_button_box">
+                        <button
+                        name="delete_log"
+                        type="object"
+                        string="Remove Session"
+                        class="btn-warning"
+                        confirm="¿Estás seguro de que quieres borrar esta sesión?"
+                    />
+                        <button
+                        name="delete_all_user_sessions"
+                        type="object"
+                        string="Delete All User Sessions"
+                        class="btn-danger"
+                        confirm="¿Estás seguro de que quieres borrar todas las sesiones de este usuario? Esta acción solo funcionará si el usuario es interno (no portal o público)."
+                        invisible="user_id == False"
+                    />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="res_device_view_tree">
+            <field name="name">res.device.list</field>
+            <field name="model">res.device</field>
+            <field name="arch" type="xml">
+                <tree default_order="last_activity desc">
+                    <field name="user_id" />
+                    <field name="display_name" string="Name" />
+                    <field name="ip_address" />
+                    <field name="first_activity" />
+                    <field name="last_activity" />
+                    <field name="country" invisible="1" />
+                    <field name="city" invisible="1" />
+                    <field name="revoked" invisible="1" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="res_device_view_kanban">
+            <field name="name">res.device.kanban</field>
+            <field name="model">res.device</field>
+            <field name="arch" type="xml">
+                <kanban
+                create="false"
+                default_order="is_current desc, last_activity desc"
+            >
+                    <field name="id" />
+                    <field name="device_type" />
+                    <field name="last_activity" />
+                    <field name="is_current" />
+                    <field name="revoked" />
+                    <field name="user_id" />
+                    <field name="ip_address" />
+                    <field name="country" />
+                    <field name="city" />
+                    <field name="display_name" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click d-flex flex-row">
+                                <div class="me-3">
+                                    <t
+                                    t-if="record.device_type.raw_value === 'computer'"
+                                >
+                                        <span
+                                        class="fa fa-laptop fs-1"
+                                        title="Computer"
+                                        role="img"
+                                        aria-label="Computer"
+                                    />
+                                    </t>
+                                    <t t-else="">
+                                        <span
+                                        class="fa fa-mobile fs-1"
+                                        title="Mobile"
+                                        role="img"
+                                        aria-label="Mobile"
+                                    />
+                                    </t>
+                                </div>
+                                <div class="d-flex flex-column ms-3">
+                                    <div class="d-flex align-items-center">
+                                        <field
+                                        name="display_name"
+                                        string="Name"
+                                        class="fw-bolder"
+                                    />
+                                        <t t-if="record.is_current.raw_value">
+                                            <span
+                                            class="ms-2 text-success o_status o_status_green"
+                                        />
+                                        </t>
+                                    </div>
+                                    <div class="text-muted">
+                                        <strong>User:</strong> <field name="user_id" />
+                                    </div>
+                                    <field name="ip_address" />
+                                    <div
+                                    t-if="record.country.raw_value || record.city.raw_value"
+                                >
+                                        <field name="country" /> <field name="city" />
+                                    </div>
+                                    <div class="text-muted">
+                                        <strong>Last activity:</strong>
+                                    <t
+                                        t-set="lastActivity"
+                                        t-value="luxon.DateTime.fromISO(record.last_activity.raw_value)"
+                                    />
+                                    <t
+                                        t-set="minutesAgo"
+                                        t-value="lastActivity.diffNow('minutes').minutes"
+                                    />
+
+                                    <t t-if="minutesAgo lt -1">
+                                        <t t-out=" lastActivity.toRelative()" />
+                                    </t>
+                                    <t t-else="">
+                                        now
+                                    </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_user_device" model="ir.actions.act_window">
+            <field name="name">User Devices</field>
+            <field name="res_model">res.device</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+        <menuitem
+        action="action_user_device"
+        id="menu_action_user_device"
+        parent="base.menu_security"
+        sequence="10"
+    />
+
+</odoo>
