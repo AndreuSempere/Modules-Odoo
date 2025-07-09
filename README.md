@@ -1,1 +1,1 @@
-# Devices-Odoo
+# Modules-Odoo
