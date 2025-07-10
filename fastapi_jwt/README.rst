@@ -43,7 +43,4 @@ Ejemplo de respuesta:
 }
 
 
-Contributors
-------------
 
-* Andreu Sempere Mico <asempere@practicas.ontinet.com>
