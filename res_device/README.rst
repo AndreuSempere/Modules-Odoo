@@ -29,10 +29,4 @@ Uso
 El módulo permite:
 
 * Gestionar dispositivos con sus características
-* Realizar seguimiento del estado de los dispositivos
-
-
-Contribuidores
-------------
-
-* Andreu Sempere Mico <asempere@practicas.ontinet.com>
+* Realizar seguimiento del estado de los sesiones de los usuarios 
