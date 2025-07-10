@@ -1,10 +1,9 @@
 # Copyright 2025 Andreu Sempere - asempere@practicas.ontinet.com
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 {
-    "name": "FastApi JWT Ontinet",
+    "name": "FastApi JWT",
     "summary": "Extends the functionality of Fastapi",
-    "author": "Ontinet.com S.L.U.",
-    "website": "https://www.ontinet.com",
+    "author": "Andreu Sempere Mico",
     "version": "17.0.1.0.0",
     "license": "LGPL-3",
     "installable": True,
